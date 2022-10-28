@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: "mysql:latest"
+    container_name: myDB
+    volumes:
+      - "./:/docker-entrypoint-initdb.d/"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql2022
+
+  php-apache:
+    build: /
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - mysql
+  drawer:
+    container_name: Drawer
+    image: php:7.2-apache
+    ports:
+      - 8080:80
+    volumes:
+      - ./drawer:/var/www/html
+
+  sorter:
+    container_name: Sorter
+    image: php:7.2-apache
+    ports:
+      - 8081:80
+    volumes:
+      - ./sorter:/var/www/html
+  consoler:
+    container_name: Consoler
+    image: php:7.2-apache
+    ports:
+      - 8082:80
+    volumes:
+      - ./consoler:/var/www/html
